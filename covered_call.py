@@ -79,7 +79,7 @@ def evaluate_portfolio_covered_call(
     min_net_annualized_yield: float = 0.04,
     r: float = 0.0,
     tax_penalty_weight: float = 1.0,
-    require_both_vol_signals: bool = False,
+    require_both_vol_signals: bool = True,
 ) -> Dict[str, Any]:
     """Scan an option chain for the best covered call to write.
 
@@ -98,9 +98,9 @@ def evaluate_portfolio_covered_call(
         0.0 for a tax-advantaged account, or an intermediate value to reflect
         expected deferral.
     require_both_vol_signals : bool
-        If False (default), the vol gate passes when *either* IV rank or the
-        IV/HV ratio is elevated. If True, it requires *both* — the stricter
-        "premium is genuinely rich" interpretation.
+        If True (default), the vol gate requires *both* IV rank and the IV/HV
+        ratio to be elevated — the stricter "premium is genuinely rich"
+        interpretation. If False, the gate passes when *either* is elevated.
     """
     if sigma <= 0:
         return {"status": "no opportunity here", "reason": "Non-positive volatility."}
